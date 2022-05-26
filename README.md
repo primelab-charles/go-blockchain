@@ -28,8 +28,9 @@ Example: </br>
 
 "getbalance" is used to get wallet balance of an address </br>
 ```bash
+Usage of getbalance:
   -address string
-        The address to get balance
+        The address to get balance for
 ```
 
 Example: </br>
