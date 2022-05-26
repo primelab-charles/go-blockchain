@@ -2,27 +2,34 @@ package blockchain
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"log"
 )
 import "encoding/gob"
 
 type Block struct {
-	// when the blockchain gets complicated, then a timestamp, block height and few other fields that go into
-	// calculating the hash
-	Hash     []byte // is derived from the data and the prevHash that was used to for the previous block
-	Data     []byte // could be anything from documents, image, ledgers
-	PrevHash []byte // the hash of the previous block.
-	Nonce    int
+	// when the blockchain gets complicated, then a timestamp, block height and few other fields that go into calculating the hash
+	// Each block needs to have at least 1 transaction and can have many different transactions
+	Hash         []byte         // is derived from the data and the prevHash that was used to for the previous block
+	Transactions []*Transaction // could be anything from documents, image, ledgers
+	PrevHash     []byte         // the hash of the previous block.
+	Nonce        int
 }
 
-// func (b *Block) DerivedHash() {
-// 	info := bytes.Join([][]byte{b.Data, b.PrevHash}, []byte{})
-// 	hash := sha256.Sum256(info)
-// 	b.Hash = hash[:]
-// }
+func (b *Block) HashTransactions() []byte {
+	var txHashes [][]byte
+	var txHash [32]byte
 
-func CreateBlock(data string, prevHash []byte) *Block {
-	block := &Block{[]byte{}, []byte(data), prevHash, 0}
+	for _, tx := range b.Transactions {
+		txHashes = append(txHashes, tx.ID)
+	}
+	txHash = sha256.Sum256(bytes.Join(txHashes, []byte{}))
+
+	return txHash[:]
+}
+
+func CreateBlock(txs []*Transaction, prevHash []byte) *Block {
+	block := &Block{[]byte{}, txs, prevHash, 0}
 	// block.DerivedHash()
 	pow := NewProof(block)
 	nonce, hash := pow.Run()
@@ -33,8 +40,8 @@ func CreateBlock(data string, prevHash []byte) *Block {
 	return block
 }
 
-func Genesis() *Block {
-	return CreateBlock("Genesis", []byte{})
+func Genesis(coinbase *Transaction) *Block {
+	return CreateBlock([]*Transaction{coinbase}, []byte{})
 }
 
 func (b *Block) Serialize() []byte {
