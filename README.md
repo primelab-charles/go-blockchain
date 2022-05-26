@@ -1,5 +1,5 @@
 # Go4 Blockchain
-[![Developed Using](https://img.shields.io/badge/made%20with-C%23-success.svg?)]( https://go.dev/)
+[![Developed Using](https://pkg.go.dev/badge/golang.org/x/image.svg)](https://pkg.go.dev/golang.org/x/example)
 
 Intro: Go4 has announced their plans to develop their own block chain. The team, who is best known for their work on a proof of work consensus algorithm, feels that this is the next step in their development. 3 nodes are currently running the Go4 block chain and more are planned to be added in the future. The company has stated that they plan to open source all of their code and invites other developers to participate in the project. They believe that this will help create a strong community around the project and further development of the block chain. Proof of Work consensus is currently being used but Go4 is also exploring other options including delegated proof of stake and voting based
 
